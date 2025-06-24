@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/views/home/home_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const TestPage(),
+      home: const HomeView(),
     );
   }
 }
@@ -59,6 +60,6 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(backgroundColor: Colors.blue,));
+    return Scaffold(appBar: AppBar(backgroundColor: Colors.blue));
   }
 }
