@@ -1,11 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+
 import 'package:todo/extensions/space_exs.dart';
 import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
+import 'package:todo/utils/constants.dart';
 import 'package:todo/views/home/components/fab.dart';
 import 'package:todo/views/home/widgets/task_widget.dart';
+
+import 'package:animate_do/animate_do.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -15,6 +18,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final List<int> testing = [];
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -77,25 +82,59 @@ class _HomeViewState extends State<HomeView> {
 
             // Tasks
             Expanded(
-              child: ListView.builder(
-                itemCount: 20,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  return Dismissible(
-                    direction: DismissDirection.horizontal,
-                    onDismissed: (_) {
-                      // We will remove current task from db
-                    },
-                    background: Row(
-                      children: [
-                        Icon(Icons.delete_outline, color: Colors.grey),
-                      ],
-                    ),
-                    key: Key(index.toString()),
-                    child: const TaskWidget(),
-                  );
-                },
-              ),
+              child:
+                  testing.isNotEmpty
+                      // Task list is not empty
+                      ? ListView.builder(
+                        itemCount: testing.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return Dismissible(
+                            direction: DismissDirection.horizontal,
+                            onDismissed: (_) {
+                              // We will remove current task from db
+                            },
+                            background: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.grey,
+                                ),
+                                8.w,
+                                const Text(
+                                  AppStr.deleteTask,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            key: Key(index.toString()),
+                            child: const TaskWidget(),
+                          );
+                        },
+                      )
+                      // Task list is empty
+                      : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Lottie Anime
+                          FadeIn(
+                            child: SizedBox(
+                              width: 200,
+                              height: 200,
+                              child: Lottie.asset(
+                                lottieURL,
+                                animate: testing.isNotEmpty ? false : true,
+                              ),
+                            ),
+                          ),
+
+                          FadeInUp(
+                            from: 30,
+                            child: const Text(AppStr.doneAllTask),
+                          ),
+                        ],
+                      ),
             ),
           ],
         ),
