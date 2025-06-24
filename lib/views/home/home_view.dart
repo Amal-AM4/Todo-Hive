@@ -57,11 +57,21 @@ class _HomeViewState extends State<HomeView> {
                     children: [
                       Text(AppStr.mainTitle, style: textTheme.displayLarge),
                       3.h,
-                      Text('1 of 3 task', style: textTheme.titleMedium),
+                      Text(
+                        '1 of 3 task',
+                        style: textTheme.titleMedium,
+                        textAlign: TextAlign.left,
+                      ),
                     ],
                   ),
                 ],
               ),
+            ),
+           
+            // Divider
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Divider(thickness: 2, indent: 100),
             ),
           ],
         ),
