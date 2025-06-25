@@ -7,6 +7,7 @@ import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/utils/constants.dart';
 import 'package:todo/views/home/components/fab.dart';
+import 'package:todo/views/home/components/home_app_bar.dart';
 import 'package:todo/views/home/widgets/task_widget.dart';
 
 import 'package:animate_do/animate_do.dart';
@@ -19,7 +20,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final List<int> testing = [];
+  final List<int> testing = [1, 2];
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +32,12 @@ class _HomeViewState extends State<HomeView> {
       floatingActionButton: const Fab(),
 
       body: SliderDrawer(
-        // Drawer
-        slider: Container(),
-
-        // Main Body
-        child: _buildHomeBody(textTheme),
+        appBar: const HomeAppBar(), // ✅ Custom AppBar widget
+        slider: Container(
+          color: Colors.red,
+          child: const Center(child: Text('Drawer')),
+        ),
+        child: _buildHomeBody(textTheme), // ✅ Main content
       ),
     );
   }
