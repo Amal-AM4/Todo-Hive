@@ -10,6 +10,10 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
+  final TextEditingController titleTaskController = TextEditingController();
+  final TextEditingController descriptionTaskController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -45,23 +49,8 @@ class _TaskViewState extends State<TaskView> {
                       ),
                     ),
 
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      child: TextFormField(
-                        maxLength: 6,
-                        cursorHeight: 24,
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Task Title
+                    RepTextField(controller: titleTaskController),
                   ],
                 ),
               ),
@@ -95,6 +84,40 @@ class _TaskViewState extends State<TaskView> {
           ),
           SizedBox(width: 70, child: Divider(thickness: 2)),
         ],
+      ),
+    );
+  }
+}
+
+class RepTextField extends StatelessWidget {
+  const RepTextField({super.key, required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      child: ListTile(
+        title: TextFormField(
+          controller: controller,
+          maxLength: 6,
+          cursorHeight: 24,
+          style: TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+          ),
+          onFieldSubmitted: (value) {},
+          // later will work on this part
+          onChanged: (value) {},
+          // later will work on this part
+        ),
       ),
     );
   }
