@@ -37,7 +37,22 @@ class _HomeViewState extends State<HomeView> {
         child: SliderDrawer(
           key: _sliderDrawerKey,
 
-          appBar: SliderAppBar(config: SliderAppBarConfig(title: Text('test'))),
+          appBar: SliderAppBar(
+            config: SliderAppBarConfig(
+              // backgroundColor: Colors.red,
+              title: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.delete, color: Colors.red, size: 28),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
 
           slider: Container(),
           child: _buildHomeBody(textTheme),
