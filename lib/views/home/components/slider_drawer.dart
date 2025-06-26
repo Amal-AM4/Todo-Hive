@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/extensions/space_exs.dart';
@@ -23,7 +25,7 @@ class CustomerDrawer extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 90),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: AppColors.primaryGradientColor,
           begin: Alignment.topLeft,
@@ -33,7 +35,7 @@ class CustomerDrawer extends StatelessWidget {
 
       child: Column(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 50,
             backgroundImage: NetworkImage(
               "https://avatars.githubusercontent.com/u/91388754?v=4",
@@ -42,17 +44,31 @@ class CustomerDrawer extends StatelessWidget {
           8.h,
           Text('Amal A M', style: textTheme.displayMedium),
           Text('Flutter dev', style: textTheme.displaySmall),
-
+          24.h,
           Container(
+            margin: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
             width: double.infinity,
             height: 300,
             child: ListView.builder(
-              itemCount: 4,
+              itemCount: icons.length,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  child: ListTile(
-                    leading: Icon(icons[index]),
-                    title: Text(texts[index]),
+                return InkWell(
+                  onTap: () {
+                    log(texts[index] + ' Item Tapped');
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(3),
+                    child: ListTile(
+                      leading: Icon(
+                        icons[index],
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      title: Text(
+                        texts[index],
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
                 );
               },
