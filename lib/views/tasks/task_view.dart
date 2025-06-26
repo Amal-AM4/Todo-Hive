@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:todo/extensions/space_exs.dart';
 import 'package:todo/utils/app_str.dart';
+import 'package:todo/views/tasks/components/rep_textfield.dart';
 import 'package:todo/views/tasks/widgets/task_view_app.dart';
+
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({super.key});
@@ -58,6 +62,59 @@ class _TaskViewState extends State<TaskView> {
                       controller: descriptionTaskController,
                       isForDescription: true,
                     ),
+                    20.h,
+
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder:
+                              (_) => SizedBox(
+                                height: 280,
+                                child: TimePickerWidget(),
+                              ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        width: double.infinity,
+                        height: 55,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                AppStr.timeString,
+                                style: textTheme.headlineSmall,
+                              ),
+                            ),
+
+                            Container(
+                              margin: EdgeInsets.only(right: 10),
+                              width: 80,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.shade200,
+                              ),
+                              child: Center(
+                                // This text will show Date Time as Time
+                                child: Text(
+                                  "Time",
+                                  style: textTheme.titleSmall,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -91,52 +148,6 @@ class _TaskViewState extends State<TaskView> {
           ),
           SizedBox(width: 70, child: Divider(thickness: 2)),
         ],
-      ),
-    );
-  }
-}
-
-class RepTextField extends StatelessWidget {
-  const RepTextField({
-    super.key,
-    required this.controller,
-    this.isForDescription = false,
-  });
-
-  final TextEditingController controller;
-  final bool isForDescription;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      child: ListTile(
-        title: TextFormField(
-          controller: controller,
-          maxLength: !isForDescription ? 6 : null,
-          cursorHeight: 24,
-          style: TextStyle(color: Colors.black),
-          decoration: InputDecoration(
-            border: isForDescription ? InputBorder.none : null,
-            counter: Container(),
-            hintText: isForDescription ? AppStr.addNote : null,
-            prefixIcon:
-                isForDescription
-                    ? Icon(Icons.bookmark_border, color: Colors.grey)
-                    : null,
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-          ),
-          onFieldSubmitted: (value) {},
-          // later will work on this part
-          onChanged: (value) {},
-          // later will work on this part
-        ),
       ),
     );
   }
