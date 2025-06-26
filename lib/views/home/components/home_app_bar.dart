@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HomeAppBar extends StatefulWidget {
-  const HomeAppBar({super.key});
+  final VoidCallback onMenuTap; // 👈 Add this
+
+  const HomeAppBar({super.key, required this.onMenuTap});
 
   @override
   State<HomeAppBar> createState() => _HomeAppBarState();
@@ -16,7 +18,7 @@ class _HomeAppBarState extends State<HomeAppBar>
   void initState() {
     animateController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 300),
     );
     super.initState();
   }
@@ -36,6 +38,8 @@ class _HomeAppBarState extends State<HomeAppBar>
         animateController.reverse();
       }
     });
+
+    widget.onMenuTap(); // 👈 Call the parent toggle
   }
 
   @override
@@ -46,7 +50,6 @@ class _HomeAppBarState extends State<HomeAppBar>
       child: Padding(
         padding: const EdgeInsets.only(top: 20.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
