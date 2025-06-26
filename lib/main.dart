@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo/views/home/home_view.dart';
-import 'package:todo/views/tasks/task_view.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();

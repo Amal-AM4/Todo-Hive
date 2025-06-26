@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:todo/extensions/space_exs.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/views/tasks/components/rep_textfield.dart';
@@ -66,13 +67,14 @@ class _TaskViewState extends State<TaskView> {
 
                     GestureDetector(
                       onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder:
-                              (_) => SizedBox(
-                                height: 280,
-                                child: TimePickerWidget(),
-                              ),
+                        DatePicker.showTimePicker(
+                          context,
+                          showTitleActions: true,
+                          showSecondsColumn: false, // Optional
+                          onConfirm: (time) {
+                            log('Selected time: $time');
+                          },
+                          currentTime: DateTime.now(),
                         );
                       },
                       child: Container(
