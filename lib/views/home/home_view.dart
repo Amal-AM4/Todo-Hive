@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:lottie/lottie.dart';
@@ -7,8 +9,10 @@ import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/utils/constants.dart';
 import 'package:todo/views/home/components/fab.dart';
-import 'package:todo/views/home/components/home_app_bar.dart';
+import 'package:todo/views/home/components/slider_drawer.dart';
 import 'package:todo/views/home/widgets/task_widget.dart';
+
+import 'package:flutter/services.dart';
 
 import 'package:animate_do/animate_do.dart';
 
@@ -25,6 +29,19 @@ class _HomeViewState extends State<HomeView> {
       GlobalKey<SliderDrawerState>();
 
   @override
+  void initState() {
+    super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -36,6 +53,8 @@ class _HomeViewState extends State<HomeView> {
       body: SafeArea(
         child: SliderDrawer(
           key: _sliderDrawerKey,
+          isDraggable: false,
+          animationDuration: 1000,
 
           appBar: SliderAppBar(
             config: SliderAppBarConfig(
@@ -45,7 +64,9 @@ class _HomeViewState extends State<HomeView> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        log('delete btn');
+                      },
                       icon: Icon(Icons.delete, color: Colors.red, size: 28),
                     ),
                   ],
@@ -54,7 +75,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
 
-          slider: Container(),
+          slider: CustomerDrawer(),
           child: _buildHomeBody(textTheme),
         ),
       ),

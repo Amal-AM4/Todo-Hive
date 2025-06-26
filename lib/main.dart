@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:todo/views/home/home_view.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   const SystemUiOverlayStyle(
+  //     statusBarColor: Colors.black,
+  //     statusBarIconBrightness: Brightness.dark,
+  //     statusBarBrightness: Brightness.dark,
+  //   ),
+  // );
   runApp(const MyApp());
 }
 
@@ -50,16 +59,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class TestPage extends StatefulWidget {
-  const TestPage({super.key});
+// class TestPage extends StatefulWidget {
+//   const TestPage({super.key});
 
-  @override
-  State<TestPage> createState() => _TestPageState();
-}
+//   @override
+//   State<TestPage> createState() => _TestPageState();
+// }
 
-class _TestPageState extends State<TestPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(backgroundColor: Colors.blue));
-  }
-}
+// class _TestPageState extends State<TestPage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(appBar: AppBar(backgroundColor: Colors.blue));
+//   }
+// }
