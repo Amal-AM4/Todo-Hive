@@ -33,63 +33,16 @@ class _HomeViewState extends State<HomeView> {
 
       floatingActionButton: const Fab(),
 
-      body: SliderDrawer(
-        key: _sliderDrawerKey,
+      body: SafeArea(
+        child: SliderDrawer(
+          key: _sliderDrawerKey,
 
-        slider: Container(
-          color: Colors.red,
-          child: Center(child: Text('drawer content')),
+          appBar: SliderAppBar(config: SliderAppBarConfig(title: Text('test'))),
+
+          slider: Container(),
+          child: _buildHomeBody(textTheme),
         ),
-
-        appBar: HomeAppBar(
-          onMenuTap: () {
-            _sliderDrawerKey.currentState?.toggle(); // open/close drawer
-          },
-        ),
-
-        // Main body
-        child: _buildHomeBody(textTheme),
       ),
-
-      // body: Stack(
-      //   children: [
-      //     SliderDrawer(
-      //       sliderOpenSize: 179,
-      //       slider: Container(color: Colors.red),
-      //       child: _buildHomeBody(textTheme),
-      //     ),
-
-      //     // overlay your custom app bar
-      //     const SafeArea(child: HomeAppBar()),
-      //   ],
-      // ),
-
-      // body: _buildHomeBody(textTheme),
-
-      // body: SliderDrawer(
-      //   // key: _sliderDrawerKey,
-      //   appBar: SliderAppBar(
-      //     config: SliderAppBarConfig(
-      //       title: Text(
-      //         'test',
-      //         textAlign: TextAlign.center,
-      //         style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
-      //       ),
-      //     ),
-      //   ),
-      //   sliderOpenSize: 179,
-      //   slider: Container(color: Colors.red),
-      //   child: _buildHomeBody(textTheme),
-      // ),
-
-      // body: SliderDrawer(
-      //   appBar: const HomeAppBar(), // ✅ Custom AppBar widget
-      //   slider: Container(
-      //     color: Colors.red,
-      //     child: const Center(child: Text('Drawer')),
-      //   ),
-      //   child: _buildHomeBody(textTheme), // ✅ Main content
-      // ),
     );
   }
 
@@ -102,7 +55,7 @@ class _HomeViewState extends State<HomeView> {
         children: [
           // Custom App Bar
           Container(
-            margin: const EdgeInsets.only(top: 60),
+            margin: const EdgeInsets.only(top: 10),
             width: double.infinity,
             height: 100,
             child: Row(
