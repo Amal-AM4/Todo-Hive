@@ -58,20 +58,16 @@ class _HomeViewState extends State<HomeView> {
 
           appBar: SliderAppBar(
             config: SliderAppBarConfig(
+              // drawerIconColor: Colors.red,
+              // drawerIconSize: 32,
               // backgroundColor: Colors.red,
-              title: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        log('delete btn');
-                      },
-                      icon: Icon(Icons.delete, color: Colors.red, size: 28),
-                    ),
-                  ],
-                ),
+              trailing: IconButton(
+                onPressed: () {
+                  log('delete btn');
+                },
+                icon: Icon(Icons.delete, color: Colors.red, size: 28),
               ),
+              title: Text(''),
             ),
           ),
 
