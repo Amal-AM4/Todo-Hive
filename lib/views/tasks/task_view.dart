@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/extensions/space_exs.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/views/tasks/widgets/task_view_app.dart';
 
@@ -51,6 +52,12 @@ class _TaskViewState extends State<TaskView> {
 
                     // Task Title
                     RepTextField(controller: titleTaskController),
+                    70.h,
+
+                    RepTextField(
+                      controller: descriptionTaskController,
+                      isForDescription: true,
+                    ),
                   ],
                 ),
               ),
@@ -90,9 +97,14 @@ class _TaskViewState extends State<TaskView> {
 }
 
 class RepTextField extends StatelessWidget {
-  const RepTextField({super.key, required this.controller});
+  const RepTextField({
+    super.key,
+    required this.controller,
+    this.isForDescription = false,
+  });
 
   final TextEditingController controller;
+  final bool isForDescription;
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +114,17 @@ class RepTextField extends StatelessWidget {
       child: ListTile(
         title: TextFormField(
           controller: controller,
-          maxLength: 6,
+          maxLength: !isForDescription ? 6 : null,
           cursorHeight: 24,
           style: TextStyle(color: Colors.black),
           decoration: InputDecoration(
+            border: isForDescription ? InputBorder.none : null,
+            counter: Container(),
+            hintText: isForDescription ? AppStr.addNote : null,
+            prefixIcon:
+                isForDescription
+                    ? Icon(Icons.bookmark_border, color: Colors.grey)
+                    : null,
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
