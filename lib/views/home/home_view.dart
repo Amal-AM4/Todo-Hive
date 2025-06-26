@@ -9,6 +9,7 @@ import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/utils/constants.dart';
 import 'package:todo/views/home/components/fab.dart';
+import 'package:todo/views/home/components/home_app_bar.dart';
 import 'package:todo/views/home/components/slider_drawer.dart';
 import 'package:todo/views/home/widgets/task_widget.dart';
 
@@ -34,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
+        statusBarColor: Colors.black,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
       ),
@@ -56,20 +57,7 @@ class _HomeViewState extends State<HomeView> {
           isDraggable: false,
           animationDuration: 1000,
 
-          appBar: SliderAppBar(
-            config: SliderAppBarConfig(
-              // drawerIconColor: Colors.red,
-              // drawerIconSize: 32,
-              // backgroundColor: Colors.red,
-              trailing: IconButton(
-                onPressed: () {
-                  log('delete btn');
-                },
-                icon: Icon(Icons.delete, color: Colors.red, size: 28),
-              ),
-              title: Text(''),
-            ),
-          ),
+          appBar: sliderAppBar,
 
           slider: CustomerDrawer(),
           child: _buildHomeBody(textTheme),
