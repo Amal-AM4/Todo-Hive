@@ -68,15 +68,21 @@ class _TaskViewState extends State<TaskView> {
 
                     GestureDetector(
                       onTap: () {
-                        DatePicker.showDatePicker(
+                        DatePicker.showTimePicker(
                           context,
                           showTitleActions: true,
-                          minTime: DateTime(2000),
-                          maxTime: DateTime(2100),
-                          onConfirm: (date) {
-                            log("Selected date: $date");
+
+                          // Real-time
+                          onChanged: (time) {
+                            log("Changing: $time");
+                          },
+
+                          // Final value
+                          onConfirm: (time) {
+                            log("Selected time: $time");
                           },
                           currentTime: DateTime.now(),
+                          locale: LocaleType.en,
                         );
                       },
                       child: Container(
