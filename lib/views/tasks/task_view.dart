@@ -74,7 +74,7 @@ class _TaskViewState extends State<TaskView> {
                           minTime: DateTime(2000),
                           maxTime: DateTime(2100),
                           onConfirm: (date) {
-                            print("Selected date: $date");
+                            log("Selected date: $date");
                           },
                           currentTime: DateTime.now(),
                         );
