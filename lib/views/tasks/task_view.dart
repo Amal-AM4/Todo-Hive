@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:todo/extensions/space_exs.dart';
+import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/views/tasks/components/date_time_selection.dart';
 import 'package:todo/views/tasks/components/rep_textfield.dart';
@@ -44,9 +45,63 @@ class _TaskViewState extends State<TaskView> {
 
               // Main Task View Activity
               _buildMainTaskViewActivity(textTheme, context),
+
+              // Bottom side buttons
+              _buildBottomSideButtons(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // Bottom side buttons
+  Widget _buildBottomSideButtons() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // Delete current Task button
+          MaterialButton(
+            onPressed: () {},
+            minWidth: 150,
+            color: Colors.white,
+            height: 55,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+
+            child: Row(
+              children: [
+                Icon(Icons.close, color: AppColors.primaryColor),
+                5.w,
+                Text(
+                  AppStr.deleteTask,
+                  style: TextStyle(color: AppColors.primaryColor),
+                ),
+              ],
+            ),
+          ),
+
+          // Add or Update Task
+          MaterialButton(
+            onPressed: () {
+              // add or update
+            },
+            minWidth: 150,
+            color: AppColors.primaryColor,
+            height: 55,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+
+            child: Text(
+              AppStr.addTaskString,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
