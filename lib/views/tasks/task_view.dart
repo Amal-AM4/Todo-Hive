@@ -41,93 +41,8 @@ class _TaskViewState extends State<TaskView> {
               // Top side texts
               _buildTopSideTexts(textTheme),
 
-              SizedBox(
-                width: double.infinity,
-                height: 530,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title of TextFiled
-                    Padding(
-                      padding: EdgeInsets.only(left: 30),
-                      child: Text(
-                        AppStr.titleOfTitleTextField,
-                        style: textTheme.headlineMedium,
-                      ),
-                    ),
-
-                    // Task Title
-                    RepTextField(controller: titleTaskController),
-                    70.h,
-
-                    RepTextField(
-                      controller: descriptionTaskController,
-                      isForDescription: true,
-                    ),
-                    20.h,
-
-                    GestureDetector(
-                      onTap: () {
-                        DatePicker.showTimePicker(
-                          context,
-                          showTitleActions: true,
-
-                          // Real-time
-                          onChanged: (time) {
-                            log("Changing: $time");
-                          },
-
-                          // Final value
-                          onConfirm: (time) {
-                            log("Selected time: $time");
-                          },
-                          currentTime: DateTime.now(),
-                          locale: LocaleType.en,
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        width: double.infinity,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.grey.shade400),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                AppStr.timeString,
-                                style: textTheme.headlineSmall,
-                              ),
-                            ),
-
-                            Container(
-                              margin: EdgeInsets.only(right: 10),
-                              width: 80,
-                              height: 35,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.shade200,
-                              ),
-                              child: Center(
-                                // This text will show Date Time as Time
-                                child: Text(
-                                  "Time",
-                                  style: textTheme.titleSmall,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Main Task View Activity
+              _buildMainTaskViewActivity(textTheme, context),
             ],
           ),
         ),
@@ -135,6 +50,86 @@ class _TaskViewState extends State<TaskView> {
     );
   }
 
+  // Main Task View Activity
+  SizedBox _buildMainTaskViewActivity(
+    TextTheme textTheme,
+    BuildContext context,
+  ) {
+    return SizedBox(
+      width: double.infinity,
+      height: 530,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title of TextFiled
+          Padding(
+            padding: EdgeInsets.only(left: 30),
+            child: Text(
+              AppStr.titleOfTitleTextField,
+              style: textTheme.headlineMedium,
+            ),
+          ),
+
+          // Task Title
+          RepTextField(controller: titleTaskController),
+          70.h,
+
+          RepTextField(
+            controller: descriptionTaskController,
+            isForDescription: true,
+          ),
+          20.h,
+
+          // Time selection
+          DateTimeSelectionWidget(
+            onTap: () {
+              DatePicker.showTimePicker(
+                context,
+                showTitleActions: true,
+
+                // Real-time
+                onChanged: (time) {
+                  log("Changing: $time");
+                },
+
+                // Final value
+                onConfirm: (time) {
+                  log("Selected time: $time");
+                },
+                currentTime: DateTime.now(),
+                locale: LocaleType.en,
+              );
+            },
+            title: AppStr.timeString,
+          ),
+
+          24.h,
+
+          // Date Selection
+          DateTimeSelectionWidget(
+            onTap: () {
+              DatePicker.showDatePicker(
+                context,
+                showTitleActions: true,
+                maxTime: DateTime(2030, 4, 5),
+                minTime: DateTime.now(),
+
+                onConfirm: (date) {
+                  // later
+                  log("$date");
+                },
+
+                currentTime: DateTime.now(),
+              );
+            },
+            title: AppStr.dateString,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Top side texts
   Widget _buildTopSideTexts(TextTheme textTheme) {
     return SizedBox(
       width: double.infinity,
@@ -158,6 +153,58 @@ class _TaskViewState extends State<TaskView> {
           ),
           SizedBox(width: 70, child: Divider(thickness: 2)),
         ],
+      ),
+    );
+  }
+}
+
+class DateTimeSelectionWidget extends StatelessWidget {
+  const DateTimeSelectionWidget({
+    super.key,
+    required this.onTap,
+    required this.title,
+  });
+
+  final VoidCallback onTap;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        width: double.infinity,
+        height: 55,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade400),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(title, style: textTheme.headlineSmall),
+            ),
+
+            Container(
+              margin: EdgeInsets.only(right: 10),
+              width: 80,
+              height: 35,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey.shade200,
+              ),
+              child: Center(
+                // This text will show Date Time as Time
+                child: Text(title, style: textTheme.titleSmall),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
