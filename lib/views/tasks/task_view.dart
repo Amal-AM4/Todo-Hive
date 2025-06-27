@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-// import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
 import 'package:todo/extensions/space_exs.dart';
@@ -8,8 +7,7 @@ import 'package:todo/utils/app_str.dart';
 import 'package:todo/views/tasks/components/rep_textfield.dart';
 import 'package:todo/views/tasks/widgets/task_view_app.dart';
 
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart'
-    as PluginDatetimePicker;
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({super.key});
@@ -70,7 +68,7 @@ class _TaskViewState extends State<TaskView> {
 
                     GestureDetector(
                       onTap: () {
-                        PluginDatetimePicker.DatePicker.showDatePicker(
+                        DatePicker.showDatePicker(
                           context,
                           showTitleActions: true,
                           minTime: DateTime(2000),
