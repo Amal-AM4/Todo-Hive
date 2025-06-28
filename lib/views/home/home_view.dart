@@ -23,7 +23,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final List<int> testing = [1, 2];
+  final List<int> testing = [];
   final GlobalKey<SliderDrawerState> _sliderDrawerKey =
       GlobalKey<SliderDrawerState>();
 
@@ -55,7 +55,7 @@ class _HomeViewState extends State<HomeView> {
           isDraggable: false,
           animationDuration: 1000,
 
-          appBar: sliderAppBar,
+          appBar: buildSliderAppBar(context),
 
           slider: CustomerDrawer(),
           child: _buildHomeBody(textTheme),
