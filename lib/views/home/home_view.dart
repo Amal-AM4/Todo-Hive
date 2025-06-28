@@ -3,6 +3,7 @@ import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:todo/extensions/space_exs.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/utils/constants.dart';
@@ -23,7 +24,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final List<int> testing = [];
+  final List<int> testing = [1];
   final GlobalKey<SliderDrawerState> _sliderDrawerKey =
       GlobalKey<SliderDrawerState>();
 
@@ -144,7 +145,16 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                           key: Key(index.toString()),
-                          child: const TaskWidget(),
+                          child: TaskWidget(
+                            task: Task(
+                              id: '1',
+                              title: 'Home Task',
+                              subTitle: 'Cleaning the room',
+                              createdAtDate: DateTime.now(),
+                              createdAtTime: DateTime.now(),
+                              isCompleted: false,
+                            ),
+                          ),
                         );
                       },
                     )

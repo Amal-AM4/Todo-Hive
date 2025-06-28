@@ -7,7 +7,7 @@ SliderAppBar buildSliderAppBar(BuildContext context) {
     config: SliderAppBarConfig(
       trailing: IconButton(
         onPressed: () {
-          noTaskWarning(context);
+          // deleteAllTask(context);
         },
         icon: Icon(Icons.delete, color: Colors.red, size: 28),
       ),

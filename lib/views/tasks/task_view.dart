@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:todo/extensions/space_exs.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/views/tasks/components/date_time_selection.dart';
@@ -12,16 +14,47 @@ import 'package:todo/views/tasks/widgets/task_view_app.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView({super.key});
+  const TaskView({
+    super.key,
+    this.titleTaskController,
+    this.descriptionTaskController,
+    this.task,
+  });
+
+  final TextEditingController? titleTaskController;
+  final TextEditingController? descriptionTaskController;
+  final Task? task;
 
   @override
   State<TaskView> createState() => _TaskViewState();
 }
 
 class _TaskViewState extends State<TaskView> {
-  final TextEditingController titleTaskController = TextEditingController();
-  final TextEditingController descriptionTaskController =
-      TextEditingController();
+  var title;
+  var subTitle;
+  DateTime? time;
+  DateTime? date;
+
+  // if any task already exist return True otherwise false
+  bool isTaskAlreadyExist() {
+    if (widget.titleTaskController?.text == null &&
+        widget.descriptionTaskController?.text == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = widget.titleTaskController ?? TextEditingController();
+    _descriptionController =
+        widget.descriptionTaskController ?? TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,30 +160,48 @@ class _TaskViewState extends State<TaskView> {
           ),
 
           // Task Title
-          RepTextField(controller: titleTaskController),
+          RepTextField(
+            controller: _titleController,
+            onChanged: (String inputTitle) {
+              title = inputTitle;
+            },
+            onFieldSubmitted: (String inputTitle) {
+              title = inputTitle;
+            },
+          ),
           70.h,
 
           RepTextField(
-            controller: descriptionTaskController,
+            controller: _descriptionController,
+            onChanged: (String inputsubTitle) {
+              title = inputsubTitle;
+            },
+            onFieldSubmitted: (String inputsubTitle) {
+              title = inputsubTitle;
+            },
             isForDescription: true,
           ),
           20.h,
 
           // Time selection
           DateTimeSelectionWidget(
+            time:
+                time != null ? DateFormat('hh:mm a').format(time!) : '-- : --',
             onTap: () {
               DatePicker.showTimePicker(
                 context,
                 showTitleActions: true,
 
                 // Real-time
-                onChanged: (time) {
-                  log("Changing: $time");
+                onChanged: (selectedTime) {
+                  log("Changing: $selectedTime");
                 },
 
                 // Final value
-                onConfirm: (time) {
-                  log("Selected time: $time");
+                onConfirm: (selectedTime) {
+                  setState(() {
+                    time = selectedTime; // ✅ update your state variable
+                  });
                 },
                 currentTime: DateTime.now(),
                 locale: LocaleType.en,
@@ -163,6 +214,7 @@ class _TaskViewState extends State<TaskView> {
 
           // Date Selection
           DateTimeSelectionWidget(
+            time: date != null ? DateFormat.yMMMd().format(date!) : 'No Date',
             onTap: () {
               DatePicker.showDatePicker(
                 context,
@@ -170,9 +222,10 @@ class _TaskViewState extends State<TaskView> {
                 maxTime: DateTime(2030, 4, 5),
                 minTime: DateTime.now(),
 
-                onConfirm: (date) {
-                  // later
-                  log("$date");
+                onConfirm: (selectedDate) {
+                  setState(() {
+                    date = selectedDate;
+                  });
                 },
 
                 currentTime: DateTime.now(),
@@ -195,9 +248,14 @@ class _TaskViewState extends State<TaskView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(width: 70, child: Divider(thickness: 2)),
+
+          // will decide to add or update
           RichText(
             text: TextSpan(
-              text: AppStr.addNewTask,
+              text:
+                  isTaskAlreadyExist()
+                      ? AppStr.addNewTask
+                      : AppStr.updateCurrentTask,
               style: textTheme.titleLarge,
               children: [
                 TextSpan(
