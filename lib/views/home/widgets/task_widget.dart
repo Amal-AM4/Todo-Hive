@@ -33,6 +33,7 @@ class _TaskWidgetState extends State<TaskWidget> {
   void toggleCompletion() {
     setState(() {
       widget.task.isCompleted = !widget.task.isCompleted;
+      widget.task.save();
     });
   }
 
@@ -138,37 +139,104 @@ class _TaskWidgetState extends State<TaskWidget> {
   }
 
   void _showEditDialog(BuildContext context) {
+    DateTime selectedDate = widget.task.createdAtDate;
+    TimeOfDay selectedTime = TimeOfDay.fromDateTime(widget.task.createdAtTime);
+
     showDialog(
       context: context,
       builder:
-          (_) => AlertDialog(
-            title: const Text("Edit Task"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: const InputDecoration(labelText: "Title"),
+          (_) => StatefulBuilder(
+            builder:
+                (context, setState) => AlertDialog(
+                  title: const Text("Edit Task"),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: titleController,
+                        decoration: const InputDecoration(labelText: "Title"),
+                      ),
+                      TextField(
+                        controller: subTitleController,
+                        decoration: const InputDecoration(
+                          labelText: "Subtitle",
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Date Picker Button
+                      Row(
+                        children: [
+                          const Icon(Icons.calendar_today),
+                          const SizedBox(width: 8),
+                          TextButton(
+                            onPressed: () async {
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: selectedDate,
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                              );
+                              if (picked != null) {
+                                setState(() => selectedDate = picked);
+                              }
+                            },
+                            child: Text(
+                              DateFormat.yMMMEd().format(selectedDate),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // Time Picker Button
+                      Row(
+                        children: [
+                          const Icon(Icons.access_time),
+                          const SizedBox(width: 8),
+                          TextButton(
+                            onPressed: () async {
+                              final picked = await showTimePicker(
+                                context: context,
+                                initialTime: selectedTime,
+                              );
+                              if (picked != null) {
+                                setState(() => selectedTime = picked);
+                              }
+                            },
+                            child: Text(selectedTime.format(context)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        widget.task.title = titleController.text.trim();
+                        widget.task.subTitle = subTitleController.text.trim();
+
+                        // Update date & time
+                        widget.task.createdAtDate = selectedDate;
+                        widget.task.createdAtTime = DateTime(
+                          selectedDate.year,
+                          selectedDate.month,
+                          selectedDate.day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+
+                        widget.task.save(); // Save to Hive
+                        setState(() {}); // Update UI
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Save"),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text("Cancel"),
+                    ),
+                  ],
                 ),
-                TextField(
-                  controller: subTitleController,
-                  decoration: const InputDecoration(labelText: "Subtitle"),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  saveChanges();
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Save"),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text("Cancel"),
-              ),
-            ],
           ),
     );
   }

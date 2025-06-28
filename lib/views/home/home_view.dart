@@ -30,6 +30,26 @@ class _HomeViewState extends State<HomeView> {
   final GlobalKey<SliderDrawerState> _sliderDrawerKey =
       GlobalKey<SliderDrawerState>();
 
+  // check value of circle indicator
+  dynamic valueOfIndicator(List<Task> task) {
+    if (task.isNotEmpty) {
+      return task.length;
+    } else {
+      return 3;
+    }
+  }
+
+  // check done Tasks
+  int checkDoneTask(List<Task> tasks) {
+    int i = 0;
+    for (Task doneTask in tasks) {
+      if (doneTask.isCompleted) {
+        i++;
+      }
+    }
+    return i;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -100,7 +120,7 @@ class _HomeViewState extends State<HomeView> {
                   width: 30,
                   height: 30,
                   child: CircularProgressIndicator(
-                    value: 1 / 4,
+                    value: checkDoneTask(tasks) / valueOfIndicator(tasks),
                     backgroundColor: Colors.grey,
                     valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
                   ),
@@ -116,7 +136,7 @@ class _HomeViewState extends State<HomeView> {
                     Text(AppStr.mainTitle, style: textTheme.displayLarge),
                     3.h,
                     Text(
-                      '1 of 3 task',
+                      '${checkDoneTask(tasks)} of ${tasks.length} task',
                       style: textTheme.titleMedium,
                       textAlign: TextAlign.left,
                     ),
