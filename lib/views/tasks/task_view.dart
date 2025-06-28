@@ -39,44 +39,43 @@ class _TaskViewState extends State<TaskView> {
 
   // if any task already exist return True otherwise false
   bool isTaskAlreadyExist() {
-    if (widget.titleTaskController?.text == null &&
-        widget.descriptionTaskController?.text == null) {
-      return true;
-    } else {
-      return false;
-    }
+    return widget.task != null;
   }
 
   // Main function for creating or updating tasks
-  dynamic isTaskAlreadyExistUpdateOtherWiseCreate() {
-    // HERE WE UPDATE CURRENT TASK
-    if (widget.titleTaskController?.text != null &&
-        widget.descriptionTaskController?.text != null) {
-      try {
-        widget.titleTaskController?.text = title;
-        widget.descriptionTaskController?.text = subTitle;
+  // Main function for creating or updating tasks
+  void isTaskAlreadyExistUpdateOtherWiseCreate() {
+    final inputTitle = _titleController.text.trim();
+    final inputSubTitle = _descriptionController.text.trim();
 
-        widget.task?.save();
-      } catch (e) {
-        // If user want to update task but entered nothing we will show this warning
-        updateTaskWarning(context);
-      }
-      // here we create a new Task
-    } else {
-      if (title != null && subTitle != null) {
-        var task = Task.create(
-          title: title,
-          subTitle: subTitle,
-          createdAtDate: date,
-          createdAtTime: time,
-        );
-        // we are adding this new task to Hive db using inherited widget
-        BaseWidget.of(context).dataStore.addTask(task: task);
-      } else {
-        // warning
-        emptyWarning(context);
-      }
+    // Validate fields
+    if (inputTitle.isEmpty ||
+        inputSubTitle.isEmpty ||
+        time == null ||
+        date == null) {
+      emptyWarning(context); // show alert if anything is missing
+      return;
     }
+
+    if (isTaskAlreadyExist()) {
+      // UPDATE existing task
+      widget.task!.title = inputTitle;
+      widget.task!.subTitle = inputSubTitle;
+      widget.task!.createdAtTime = time!;
+      widget.task!.createdAtDate = date!;
+      widget.task!.save(); // Save changes to Hive
+    } else {
+      // CREATE new task
+      final newTask = Task.create(
+        title: inputTitle,
+        subTitle: inputSubTitle,
+        createdAtDate: date,
+        createdAtTime: time,
+      );
+      BaseWidget.of(context).dataStore.addTask(task: newTask);
+    }
+
+    Navigator.pop(context); // ✅ optionally go back to previous screen
   }
 
   late final TextEditingController _titleController;
@@ -128,11 +127,11 @@ class _TaskViewState extends State<TaskView> {
       padding: const EdgeInsets.only(bottom: 20.0),
       child: Row(
         mainAxisAlignment:
-            isTaskAlreadyExist()
+            !isTaskAlreadyExist()
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.spaceEvenly,
         children: [
-          isTaskAlreadyExist()
+          !isTaskAlreadyExist()
               ? Container()
               :
               // Delete current Task button
@@ -293,7 +292,7 @@ class _TaskViewState extends State<TaskView> {
           RichText(
             text: TextSpan(
               text:
-                  isTaskAlreadyExist()
+                  !isTaskAlreadyExist()
                       ? AppStr.addNewTask
                       : AppStr.updateCurrentTask,
               style: textTheme.titleLarge,

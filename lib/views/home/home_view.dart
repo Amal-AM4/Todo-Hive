@@ -53,6 +53,8 @@ class _HomeViewState extends State<HomeView> {
       valueListenable: base.dataStore.listenToTask(),
       builder: (ctx, Box<Task> box, Widget? child) {
         var tasks = box.values.toList();
+
+        tasks.sort((a, b) => a.createdAtDate.compareTo(b.createdAtDate));
         return Scaffold(
           backgroundColor: Colors.white,
 
@@ -145,6 +147,7 @@ class _HomeViewState extends State<HomeView> {
                           direction: DismissDirection.horizontal,
                           onDismissed: (_) {
                             // We will remove current task from db
+                            base.dataStore.deleteTask(task: task);
                           },
                           background: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -160,7 +163,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             ],
                           ),
-                          key: Key(index.toString()),
+                          key: Key(task.id),
                           child: TaskWidget(task: task),
                         );
                       },
