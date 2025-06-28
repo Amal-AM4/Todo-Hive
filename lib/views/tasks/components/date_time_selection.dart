@@ -36,7 +36,7 @@ class DateTimeSelectionWidget extends StatelessWidget {
 
             Container(
               margin: EdgeInsets.only(right: 10),
-              width: 80,
+              width: 140,
               height: 35,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),

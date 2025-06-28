@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:todo/extensions/space_exs.dart';
+import 'package:todo/main.dart';
 import 'package:todo/models/task.dart';
 import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
@@ -45,28 +47,40 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
+    final base = BaseWidget.of(context);
 
-      floatingActionButton: const Fab(),
+    return ValueListenableBuilder(
+      valueListenable: base.dataStore.listenToTask(),
+      builder: (ctx, Box<Task> box, Widget? child) {
+        var tasks = box.values.toList();
+        return Scaffold(
+          backgroundColor: Colors.white,
 
-      body: SafeArea(
-        child: SliderDrawer(
-          key: _sliderDrawerKey,
-          isDraggable: false,
-          animationDuration: 1000,
+          floatingActionButton: const Fab(),
 
-          appBar: buildSliderAppBar(context),
+          body: SafeArea(
+            child: SliderDrawer(
+              key: _sliderDrawerKey,
+              isDraggable: false,
+              animationDuration: 1000,
 
-          slider: CustomerDrawer(),
-          child: _buildHomeBody(textTheme),
-        ),
-      ),
+              appBar: buildSliderAppBar(context),
+
+              slider: CustomerDrawer(),
+              child: _buildHomeBody(textTheme, base, tasks),
+            ),
+          ),
+        );
+      },
     );
   }
 
   // Home body
-  Widget _buildHomeBody(TextTheme textTheme) {
+  Widget _buildHomeBody(
+    TextTheme textTheme,
+    BaseWidget base,
+    List<Task> tasks,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -119,12 +133,14 @@ class _HomeViewState extends State<HomeView> {
           // Tasks
           Expanded(
             child:
-                testing.isNotEmpty
+                tasks.isNotEmpty
                     // Task list is not empty
                     ? ListView.builder(
-                      itemCount: testing.length,
+                      itemCount: tasks.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
+                        // Get single task for showing the list
+                        var task = tasks[index];
                         return Dismissible(
                           direction: DismissDirection.horizontal,
                           onDismissed: (_) {
@@ -145,16 +161,7 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                           key: Key(index.toString()),
-                          child: TaskWidget(
-                            task: Task(
-                              id: '1',
-                              title: 'Home Task',
-                              subTitle: 'Cleaning the room',
-                              createdAtDate: DateTime.now(),
-                              createdAtTime: DateTime.now(),
-                              isCompleted: false,
-                            ),
-                          ),
+                          child: TaskWidget(task: task),
                         );
                       },
                     )
@@ -169,7 +176,7 @@ class _HomeViewState extends State<HomeView> {
                             height: 200,
                             child: Lottie.asset(
                               lottieURL,
-                              animate: testing.isNotEmpty ? false : true,
+                              animate: tasks.isNotEmpty ? false : true,
                             ),
                           ),
                         ),

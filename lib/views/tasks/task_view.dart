@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:todo/extensions/space_exs.dart';
+import 'package:todo/main.dart';
 import 'package:todo/models/task.dart';
 import 'package:todo/utils/app_colors.dart';
 import 'package:todo/utils/app_str.dart';
+import 'package:todo/utils/constants.dart';
 import 'package:todo/views/tasks/components/date_time_selection.dart';
 import 'package:todo/views/tasks/components/rep_textfield.dart';
 import 'package:todo/views/tasks/widgets/task_view_app.dart';
@@ -42,6 +44,38 @@ class _TaskViewState extends State<TaskView> {
       return true;
     } else {
       return false;
+    }
+  }
+
+  // Main function for creating or updating tasks
+  dynamic isTaskAlreadyExistUpdateOtherWiseCreate() {
+    // HERE WE UPDATE CURRENT TASK
+    if (widget.titleTaskController?.text != null &&
+        widget.descriptionTaskController?.text != null) {
+      try {
+        widget.titleTaskController?.text = title;
+        widget.descriptionTaskController?.text = subTitle;
+
+        widget.task?.save();
+      } catch (e) {
+        // If user want to update task but entered nothing we will show this warning
+        updateTaskWarning(context);
+      }
+      // here we create a new Task
+    } else {
+      if (title != null && subTitle != null) {
+        var task = Task.create(
+          title: title,
+          subTitle: subTitle,
+          createdAtDate: date,
+          createdAtTime: time,
+        );
+        // we are adding this new task to Hive db using inherited widget
+        BaseWidget.of(context).dataStore.addTask(task: task);
+      } else {
+        // warning
+        emptyWarning(context);
+      }
     }
   }
 
@@ -93,34 +127,40 @@ class _TaskViewState extends State<TaskView> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment:
+            isTaskAlreadyExist()
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.spaceEvenly,
         children: [
-          // Delete current Task button
-          MaterialButton(
-            onPressed: () {},
-            minWidth: 150,
-            color: Colors.white,
-            height: 55,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-
-            child: Row(
-              children: [
-                Icon(Icons.close, color: AppColors.primaryColor),
-                5.w,
-                Text(
-                  AppStr.deleteTask,
-                  style: TextStyle(color: AppColors.primaryColor),
+          isTaskAlreadyExist()
+              ? Container()
+              :
+              // Delete current Task button
+              MaterialButton(
+                onPressed: () {},
+                minWidth: 150,
+                color: Colors.white,
+                height: 55,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
-              ],
-            ),
-          ),
+
+                child: Row(
+                  children: [
+                    Icon(Icons.close, color: AppColors.primaryColor),
+                    5.w,
+                    Text(
+                      AppStr.deleteTask,
+                      style: TextStyle(color: AppColors.primaryColor),
+                    ),
+                  ],
+                ),
+              ),
 
           // Add or Update Task
           MaterialButton(
             onPressed: () {
-              // add or update
+              isTaskAlreadyExistUpdateOtherWiseCreate();
             },
             minWidth: 150,
             color: AppColors.primaryColor,
@@ -214,7 +254,7 @@ class _TaskViewState extends State<TaskView> {
 
           // Date Selection
           DateTimeSelectionWidget(
-            time: date != null ? DateFormat.yMMMd().format(date!) : 'No Date',
+            time: date != null ? DateFormat.yMMMEd().format(date!) : 'No Date',
             onTap: () {
               DatePicker.showDatePicker(
                 context,
