@@ -51,7 +51,7 @@ flutter doctor
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/todo-flutter-app.git
+git clone https://github.com/Amal-AM4/Todo-Hive.git
 cd todo-flutter-app
 ```
 
