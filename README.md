@@ -52,7 +52,6 @@ flutter doctor
 
 ```bash
 git clone https://github.com/Amal-AM4/Todo-Hive.git
-cd todo-flutter-app
 ```
 
 ---
